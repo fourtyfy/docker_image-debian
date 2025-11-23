@@ -1,4 +1,4 @@
-# Use Debian as the base image
+# Use Debian as the base image for the Docker container
 FROM debian:latest-slim
 
 # Prevent interactive prompts during package installation
