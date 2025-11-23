@@ -1,5 +1,5 @@
 # Use Debian as the base image for the Docker container
-FROM debian:latest-slim
+FROM debian:slim
 
 # Prevent interactive prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
