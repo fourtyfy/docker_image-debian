@@ -2,16 +2,21 @@ FROM debian:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Update and install SSH
+# Update and install SSH + sudo
 RUN apt-get update && \
-    apt-get install -y openssh-server sudo && \
-    mkdir /var/run/sshd && \
-    ssh-keygen -A
+    apt-get install -y --no-install-recommends openssh-server sudo && \
+    rm -rf /var/lib/apt/lists/*
 
-# Set root password
+# Create SSH runtime directory
+RUN mkdir -p /var/run/sshd
+
+# Generate SSH host keys
+RUN ssh-keygen -A
+
+# Set root password (for testing only!)
 RUN echo 'root:test' | chpasswd
 
-# Configure SSH
+# Allow root login and password authentication
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 
