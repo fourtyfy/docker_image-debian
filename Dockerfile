@@ -5,26 +5,12 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Update and install SSH + sudo
 RUN apt-get update
 RUN apt-get upgrade -y
-RUN apt-get install -y
-RUN apt-get install openssh-server -y
 RUN apt-get install curl -y
 RUN rm -rf /var/lib/apt/lists/*
 
-# Create SSH runtime directory
-RUN mkdir -p /var/run/sshd
+RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --dry-run
+RUN curl -fsSL https://code-server.dev/install.sh | sh
 
-# Generate SSH host keys
-RUN ssh-keygen -A
+EXPOSE 8080
 
-# Set root password (for testing only!)
-RUN echo 'root:test' | chpasswd
-
-# Allow root login and password authentication
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
-
-EXPOSE 22
-EXPOSE 80
-EXPOSE 443
-
-CMD ["/usr/sbin/sshd", "-D", "-e"]
+CMD ["/bin/bash", "code-server"]
