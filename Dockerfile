@@ -4,9 +4,10 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Update and install SSH + sudo
 RUN apt-get update
-RUN apt-get install -y --no-install-recommends
-RUN apt-get openssh-server
-RUN apt-get curl
+RUN apt-get upgrade -y
+RUN apt-get install -y
+RUN apt-get install openssh-server -y
+RUN apt-get install curl -y
 RUN sudo
 RUN rm -rf /var/lib/apt/lists/*
 
