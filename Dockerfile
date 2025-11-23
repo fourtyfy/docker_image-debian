@@ -12,12 +12,16 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg -
 RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_24.x nodistro main" \
     > /etc/apt/sources.list.d/nodesource.list
 RUN apt update && apt install -y nodejs
+RUN npm install -g npm@11.6.3
 
 # PHP setup
 RUN curl -fsSL https://packages.sury.org/php/apt.gpg -o /etc/apt/trusted.gpg.d/sury.gpg
 RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" \
     > /etc/apt/sources.list.d/sury-php.list
 RUN apt update && apt install -y php7.4 php8.4
+
+# Install GIT
+RUN apt install -y git
 
 RUN apt upgrade -y
 RUN apt autoremove -y
@@ -28,6 +32,7 @@ USER coder
 
 EXPOSE 80
 EXPOSE 443
+EXPOSE 5173
 EXPOSE 8080
 
 # Don’t override the default ENTRYPOINT or CMD
