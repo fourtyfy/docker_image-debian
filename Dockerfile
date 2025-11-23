@@ -1,25 +1,20 @@
-# Use Debian as the base image for the Docker container
 FROM debian:latest
 
-# Prevent interactive prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Update packages and install OpenSSH server
+# Update and install SSH
 RUN apt-get update && \
     apt-get install -y openssh-server sudo && \
-    mkdir /var/run/sshd
+    mkdir /var/run/sshd && \
+    ssh-keygen -A
 
-# Set root password (change this for production!)
+# Set root password
 RUN echo 'root:test' | chpasswd
 
-# Allow root login via SSH
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+# Configure SSH
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 
-# Optional: Allow password authentication
-RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
-
-# Expose SSH port
 EXPOSE 22
 
-# Start SSH service
-CMD ["/usr/sbin/sshd", "-D"]
+CMD ["/usr/sbin/sshd", "-D", "-e"]
