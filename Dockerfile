@@ -3,9 +3,12 @@ FROM debian:latest
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Update and install SSH + sudo
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends openssh-server sudo && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends
+RUN apt-get openssh-server
+RUN apt-get curl
+RUN sudo
+RUN rm -rf /var/lib/apt/lists/*
 
 # Create SSH runtime directory
 RUN mkdir -p /var/run/sshd
