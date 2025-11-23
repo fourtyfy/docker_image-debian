@@ -7,6 +7,7 @@ RUN apt install -y ca-certificates curl gnupg lsb-release apt-transport-https
 
 # NodeSource setup
 RUN mkdir -p /etc/apt/keyrings
+RUN mkdir -p /home/coder/projects
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_24.x nodistro main" \
     > /etc/apt/sources.list.d/nodesource.list
@@ -18,11 +19,15 @@ RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" \
     > /etc/apt/sources.list.d/sury-php.list
 RUN apt update && apt install -y php7.4 php8.4
 
+RUN apt upgrade -y
+RUN apt autoremove -y
+RUN apt clean
+
 # Switch back to normal user
 USER coder
 
-EXPOSE 8080
 EXPOSE 80
 EXPOSE 443
+EXPOSE 8080
 
 # Don’t override the default ENTRYPOINT or CMD
