@@ -21,5 +21,7 @@ RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 
 EXPOSE 22
+EXPOSE 80
+EXPOSE 443
 
 CMD ["/usr/sbin/sshd", "-D", "-e"]
